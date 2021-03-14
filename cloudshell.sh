@@ -12,7 +12,7 @@ gcloud config set compute/zone us-central1-a
 
 PROJECT_ID=$(gcloud config get-value project)
 
-terraform plan -out=tfplan -var "project=$PROJECT_ID"
+terraform plan -out=tfplan -var "project=$PROJECT_ID" -var "zone=us-central1-a"
 terraform apply tfplan -auto-approve
 
 kubectl apply -f tracing-demo-deployment.yaml
