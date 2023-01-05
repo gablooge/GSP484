@@ -16,9 +16,13 @@ terraform apply tfplan
 
 kubectl apply -f tracing-demo-deployment.yaml
 
-# echo http://$(kubectl get svc tracing-demo -n default -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+while [[ -z "$(kubectl get svc tracing-demo -n default -o jsonpath='{.status.loadBalancer.ingress[0].ip}')" ]]; 
+do echo "Waiting IP" && sleep 1; 
+done
+
+echo http://$(kubectl get svc tracing-demo -n default -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
 
 # gcloud pubsub subscriptions pull --auto-ack --limit 10 tracing-demo-cli
 
-# setelah dapet IP
 curl http://$(kubectl get svc tracing-demo -n default -o jsonpath='{.status.loadBalancer.ingress[0].ip}')?string=HelloWorld
+
